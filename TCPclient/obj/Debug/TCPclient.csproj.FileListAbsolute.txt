@@ -1,0 +1,6 @@
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\bin\Debug\TCPclient.exe.config
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\bin\Debug\TCPclient.exe
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\bin\Debug\TCPclient.pdb
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\obj\Debug\TCPclient.csprojResolveAssemblyReference.cache
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\obj\Debug\TCPclient.exe
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCP\TCPclient\obj\Debug\TCPclient.pdb
