@@ -14,6 +14,7 @@ namespace TCPserver
             int bytes = 0;                                              // количество принятых байт
             int connectFlag = 0;                                        // отметка о подключении
             TcpListener server = null;
+            ConsoleKey choice;
             try
             {
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");     // локальный адрес сервера
@@ -23,23 +24,28 @@ namespace TCPserver
                 {
                     var client = server.AcceptTcpClient();              // входящее подключение
                     connectFlag = 1;
-                    Console.WriteLine("Client connected.");
+                    Console.WriteLine("Client connected. Listen...");
                     NetworkStream stream = client.GetStream();          // поток чтения/записи клиента
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
-                    if (stream.CanRead)                                 // возможность чтения из потока
+                    do
                     {
-                        StringBuilder receivedMessage = new StringBuilder();
-                        do
+                        if (stream.CanRead)                                 // возможность чтения из потока
                         {
-                            bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
-                            receivedMessage.AppendFormat($"{0}" + Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
-                        } while (stream.DataAvailable);                 // доступность данных для чтения
-                        Console.WriteLine($"Получено сообщение от клиента:\n{receivedMessage}");
-                    }
-                    string message = "Ваше сообщение получено"+ bytes;   // Это тестовое сообщение от сервера
-                    byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
-                    stream.Write(data, 0, data.Length);                 // запись массива байтов в поток
-                    Console.WriteLine("Сообщение отправлено!");
+                            StringBuilder receivedMessage = new StringBuilder();
+                            do
+                            {
+                                bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                                receivedMessage.AppendFormat($"{0}" + Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
+                            } while (stream.DataAvailable);                 // доступность данных для чтения
+                            Console.WriteLine($"Получено сообщение от клиента:\n{receivedMessage}");
+                        }
+                        string message = "Ваше сообщение получено (" + bytes + " байт)";  // сервер сообщает сколько байтов получил
+                        byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
+                        stream.Write(data, 0, data.Length);                 // запись массива байтов в поток
+                        Console.WriteLine($"Сообщение: \n{message}\nклиенту отправлено!");
+                        Console.WriteLine("Do you want to continue communication? ");
+                        choice = Console.ReadKey().Key;
+                    } while (choice != ConsoleKey.Escape);
                     stream.Close();
                     client.Close();                                     // подключение к клиенту закрыто
                     Console.WriteLine("Disconnected");

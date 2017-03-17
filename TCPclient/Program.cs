@@ -12,6 +12,8 @@ namespace TCPclient
             Console.Title = "<<TcpClient>>";
             TcpClient client = null;
             int clientCount = 0, connectFlag = 0;                       // флаг подключения
+            ConsoleKey choice;
+            byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello, it's №{clientCount} message from client");
             while (client == null)
             {
                 clientCount++;
@@ -19,27 +21,34 @@ namespace TCPclient
                 {
                     client = new TcpClient("127.0.0.1", 12345);
                     connectFlag = 1;                                    // флаг подключения
-                    Console.WriteLine("Connected! Let's send a message!");
+                    Console.WriteLine("Connected! Let's make a server query...");
                     NetworkStream stream = client.GetStream();
-                    byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello, it's №{clientCount} message from client");
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
-                    stream.Write(sendBuffer, 0, sendBuffer.Length);
-                    Console.WriteLine("Message sent successfully!");
-                    if (stream.CanRead)                                 // возможность чтения из потока
+                    do
                     {
-                        StringBuilder message = new StringBuilder();
-                        int bytes = 0;
-                        do
+                        stream.Write(sendBuffer, 0, sendBuffer.Length);
+                        Console.WriteLine("Message sent successfully!");
+                        if (stream.CanRead)                                 // возможность чтения из потока
                         {
-                            bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
-                            message.AppendFormat($"{0}" + Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
-                        } while (stream.DataAvailable);                 // доступность данных для чтения
-                        Console.WriteLine($"Received message:\n{message}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("I cannot read at this time :(");
-                    }
+                            StringBuilder message = new StringBuilder();
+                            int bytes = 0;
+                            do
+                            {
+                                bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                                message.AppendFormat($"{0}", Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
+                            } while (stream.DataAvailable);                 // доступность данных для чтения
+                            Console.WriteLine($"Received message:\n{message}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("I cannot read at this time :(");
+                        }
+                        Console.WriteLine("Do you want to continue communication? ");
+                        choice = Console.ReadKey().Key;
+                        sendBuffer = Encoding.UTF8.GetBytes(choice.ToString());
+                    } while (choice!=ConsoleKey.Escape);
+                    stream.Close();
+                    connectFlag = 0;
                 }
                 catch (Exception ex)
                 {
@@ -55,6 +64,7 @@ namespace TCPclient
                 }
             }
             Console.WriteLine("Good bye!");
+            Console.Title = "Good bye!";
             Console.Read();
         }
     }
