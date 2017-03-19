@@ -11,23 +11,25 @@ namespace TCPserver
         static void Main(string[] args)
         {
             Console.Title = "<<TcpServer>>";
-            int bytes = 0;                                              // количество принятых байт
-            int connectFlag = 0;                                        // отметка о подключении
+            int bytes = 0;                                                  // количество принятых байт
+            int connectFlag = 0;                                            // отметка о подключении
             TcpListener server = null;
             ConsoleKey choice;
+            TcpClient client = null;
+            NetworkStream stream = null;
             try
             {
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");     // локальный адрес сервера
-                server = new TcpListener(localAddr, 12345);             // сервер 
+                IPAddress localAddr = IPAddress.Parse("192.168.0.100");         // локальный адрес сервера
+                server = new TcpListener(localAddr, 12345);                 // сервер 
                 server.Start();
                 do
                 {
-                    var client = server.AcceptTcpClient();              // входящее подключение
+                    client = server.AcceptTcpClient();                      // входящее подключение
                     connectFlag = 1;
                     Console.WriteLine("Client connected. Listen...");
-                    NetworkStream stream = client.GetStream();          // поток чтения/записи клиента
+                    stream = client.GetStream();                            // поток чтения/записи клиента
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
-                    do
+                    do                                                      // ЧТЕНИЕ из потока
                     {
                         if (stream.CanRead)                                 // возможность чтения из потока
                         {
@@ -37,21 +39,16 @@ namespace TCPserver
                                 bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
                                 receivedMessage.AppendFormat($"{0}" + Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
                             } while (stream.DataAvailable);                 // доступность данных для чтения
-                            Console.WriteLine($"Получено сообщение от клиента:\n{receivedMessage}");
+                            Console.WriteLine("Получено сообщение от клиента:\n" + receivedMessage);
                         }
                         string message = "Ваше сообщение получено (" + bytes + " байт)";  // сервер сообщает сколько байтов получил
                         byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
-                        stream.Write(data, 0, data.Length);                 // запись массива байтов в поток
+                        stream.Write(data, 0, data.Length);                 // ЗАПИСЬ массива байтов в поток
                         Console.WriteLine($"Сообщение: \n{message}\nклиенту отправлено!");
-                        Console.WriteLine("Do you want to continue communication? ");
-                        choice = Console.ReadKey().Key;
-                    } while (choice != ConsoleKey.Escape);
-                    stream.Close();
-                    client.Close();                                     // подключение к клиенту закрыто
-                    Console.WriteLine("Disconnected");
+                    } while (true);
                 } while (true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (connectFlag == 1)
                     Console.WriteLine("...lost connection");
@@ -60,7 +57,11 @@ namespace TCPserver
             finally
             {
                 if (server != null)
+                {
                     server.Stop();
+                    stream.Close();
+                    client.Close();                                     // подключение к клиенту закрыто
+                }
             }
         }
     }

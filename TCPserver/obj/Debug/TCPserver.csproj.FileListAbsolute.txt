@@ -10,3 +10,9 @@ E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPcliet_server\TCPserver
 E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPcliet_server\TCPserver\obj\Debug\TCPserver.csprojResolveAssemblyReference.cache
 E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPcliet_server\TCPserver\obj\Debug\TCPserver.exe
 E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPcliet_server\TCPserver\obj\Debug\TCPserver.pdb
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\bin\Debug\TCPserver.exe.config
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\bin\Debug\TCPserver.exe
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\bin\Debug\TCPserver.pdb
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\obj\Debug\TCPserver.csprojResolveAssemblyReference.cache
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\obj\Debug\TCPserver.exe
+E:\Users\kivinew\Documents\Visual Studio 2017\Projects\TCPclient_server\TCPserver\obj\Debug\TCPserver.pdb
