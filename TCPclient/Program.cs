@@ -52,45 +52,45 @@ namespace TCPclient
         {
             Console.Title = "<<TcpClient>>";
             TcpClient client = null;
-            int clientCount = 0;
+            NetworkStream stream = null;
+            int clientCount = 1;
             ConsoleKey pressedKey;                                          //  нажатая клавиша
+            ConsoleKeyInfo cki = new ConsoleKeyInfo();
             byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello, it's №{clientCount} message from client");
             while (client == null)
             {
                 clientCount++;
                 try
                 {
-                    client = new TcpClient("192.168.0.100", 12345);
+                    client = new TcpClient("192.168.0.100", 12345);         // 1) клиент пытается достучаться до сервера
                     HUD.connected = true;
                     HUD.Reset();
-                    NetworkStream stream = client.GetStream();
+                    stream = client.GetStream();
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
-                    do
+                    while (Console.KeyAvailable==false)
                     {
-                        stream.Write(sendBuffer, 0, sendBuffer.Length);
+                        stream.Write(sendBuffer, 0, sendBuffer.Length);     // 2) отправляет серверу сообщение
                         HUD.serverText = sendBuffer.ToString();
-                        HUD.Update();
                         if (stream.CanRead)                                 //  возможность чтения из потока
                         {
                             StringBuilder message = new StringBuilder();
                             int bytes = 0;
-                            do
-                            {
+                            while (stream.DataAvailable)                    //  доступность данных для чтения
+                            {                                               // 3) получает данные от сервера
                                 bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
                                 message.AppendFormat(Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
-                            } while (stream.DataAvailable);                 //  доступность данных для чтения
+                            }
                             HUD.clientText = message.ToString();
+                            sendBuffer = Encoding.UTF8.GetBytes(message.ToString());
                         }
                         else
                         {
                             HUD.error = "I cannot read at this time :(";
-                            HUD.Update();
                         }
-                        HUD.New(60, 4, "Continue?");
-                        pressedKey = Console.ReadKey().Key;
-                        sendBuffer = Encoding.UTF8.GetBytes(pressedKey.ToString());
-                    } while (pressedKey != ConsoleKey.Escape);
-                    stream.Close();
+                    }
+                    cki = Console.ReadKey(true);
+                    if (cki.Key == ConsoleKey.Escape)
+                        break;
                 }
                 catch (Exception ex)
                 {
@@ -102,7 +102,10 @@ namespace TCPclient
                 finally
                 {
                     if (client != null)
+                    {
+                        stream.Close();
                         client.Close();
+                    }
                 }
             }
             Console.Clear();
