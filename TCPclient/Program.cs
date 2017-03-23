@@ -11,14 +11,17 @@ namespace TCPclient
         public static String clientText;
         public static String error;
         public static bool connected;
-        public static bool retry;
-
-        public static void Reset()
+        /// <summary>
+        ///  Сброс ошибок
+        /// </summary>
+        public static void ErrorReset()
         {
             error = "--------------------------------";
             Update();
         }
-
+        /// <summary>
+        ///  Обновление окна консоли
+        /// </summary>
         public static void Update()
         {
             Console.Clear();
@@ -33,13 +36,17 @@ namespace TCPclient
             else
                 Write(60, 2, "Disconnected");
         }
-
+        /// <summary>
+        ///  Метод позволяет вывести строку по указанным координатам
+        /// </summary>
         static void Write(int x, int y, String text)
         {
             Console.SetCursorPosition(x, y);
             Console.Write(text);
         }
-        //  Метод позволяет указать координаты и строку сообщения
+        /// <summary>
+        ///  Метод позволяет вывести строку по указанным координатам
+        /// </summary>
         public static void New(int x, int y, String text)
         {
             Console.SetCursorPosition(x, y);
@@ -64,7 +71,7 @@ namespace TCPclient
                 {
                     client = new TcpClient("192.168.0.100", 12345);         // 1) клиент пытается достучаться до сервера
                     HUD.connected = true;
-                    HUD.Reset();
+                    HUD.ErrorReset();
                     stream = client.GetStream();
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
                     while (Console.KeyAvailable==false)
@@ -87,6 +94,7 @@ namespace TCPclient
                         {
                             HUD.error = "I cannot read at this time :(";
                         }
+                        HUD.Update();
                     }
                     cki = Console.ReadKey(true);
                     if (cki.Key == ConsoleKey.Escape)
