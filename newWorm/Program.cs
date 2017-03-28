@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace newWorm
 {
@@ -14,9 +12,12 @@ namespace newWorm
         [STAThread]
         static void Main()
         {
+            Process proc = Process.Start("E:\\Users\\kivinew\\Documents\\Visual Studio 2017\\Projects\\TCPclient_server\\TCPserver\\bin\\Debug\\TCPserver.exe");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            Application.Run(new mainForm());
+            proc.Close();
         }
     }
 }

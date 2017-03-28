@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TCPclient
 {
-    public static class HUD
+    public static class UI
     {
         public static String serverText;
         public static String clientText;
@@ -70,14 +70,14 @@ namespace TCPclient
                 try
                 {
                     client = new TcpClient("192.168.0.100", 12345);         // 1) клиент пытается достучаться до сервера
-                    HUD.connected = true;
-                    HUD.ErrorReset();
+                    UI.connected = true;
+                    UI.ErrorReset();
                     stream = client.GetStream();
                     byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
                     while (Console.KeyAvailable==false)
                     {
                         stream.Write(sendBuffer, 0, sendBuffer.Length);     // 2) отправляет серверу сообщение
-                        HUD.serverText = sendBuffer.ToString();
+                        UI.serverText = sendBuffer.ToString();
                         if (stream.CanRead)                                 //  возможность чтения из потока
                         {
                             StringBuilder message = new StringBuilder();
@@ -87,14 +87,14 @@ namespace TCPclient
                                 bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
                                 message.AppendFormat(Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
                             }
-                            HUD.clientText = message.ToString();
+                            UI.clientText = message.ToString();
                             sendBuffer = Encoding.UTF8.GetBytes(message.ToString());
                         }
                         else
                         {
-                            HUD.error = "I cannot read at this time :(";
+                            UI.error = "I cannot read at this time :(";
                         }
-                        HUD.Update();
+                        UI.Update();
                     }
                     cki = Console.ReadKey(true);
                     if (cki.Key == ConsoleKey.Escape)
@@ -102,10 +102,10 @@ namespace TCPclient
                 }
                 catch (Exception ex)
                 {
-                    HUD.connected = false;
-                    HUD.clientText = $"{clientCount} попытка...";
-                    HUD.error = ex.Message;
-                    HUD.Update();
+                    UI.connected = false;
+                    UI.clientText = $"{clientCount} попытка...";
+                    UI.error = ex.Message;
+                    UI.Update();
                 }
                 finally
                 {
@@ -118,7 +118,7 @@ namespace TCPclient
             }
             Console.Clear();
             Console.Title = "Good bye!";
-            HUD.New(60, 20, "Good bye!\nPress ENTER for EXIT...");
+            UI.New(60, 20, "Good bye!\nPress ENTER for EXIT...");
             Console.Read();
         }
     }
