@@ -8,38 +8,51 @@ using System.Drawing;
 namespace newWorm
 {
     /// <summary>
-    /// Тип "Направление"
-    /// </summary>
-    enum direction { Up, Down, Left, Right }                    // тип "Направление"
-    /// <summary>
-    /// Координаты червя
-    /// </summary>
-    struct Coord
-    {
-        public int X;
-        public int Y;
-    }
-    /// <summary>
     /// Главная форма игрового клиента
     /// </summary>
     public partial class mainForm : Form
     {
+        int ID;                                                 // ID клиента
         TcpClient client = null;                                // объект клиента
         NetworkStream stream = null;                            // поток для связи с сервером
         byte[] sendBuffer;                                      // буфер передачи
         byte[] receiveBuffer;                                   // буфер чтения
         StringBuilder message = new StringBuilder();            // сообщение от сервера
-        Coord coord;
-        direction Direction { get; set; }                       // направление червя
-        public int WormSize { get; set; }                       // размер червя
-        public mainForm()
+        Snake snake = new Snake();                              // змея!
+        
+        Image snakePic = Image.FromFile("resources/snake.ico");
+        Graphics pen = Graphics.FromImage(snakePic);
+        
+        public mainForm()                                       // конструктор
         {
             InitializeComponent();
-            Random random = new Random();
-            coord.X = random.Next(10, 100);
-            coord.Y = random.Next(10, 50);
-            WormSize = 3;
-            Direction = direction.Left;
+        }
+        /// <summary>
+        /// Обновление pictureBox
+        /// </summary>
+        public void Upd()
+        {
+            while(snake.IsInField)// FIXME проверка при движении
+            {
+                snake.Move();
+                Draw();
+                Invalidate();
+            }
+        }
+        /// <summary>
+        /// Отрисовка червя
+        /// </summary>
+        public void Draw()                                      // отрисовка червя
+        {
+            Pen redPen = new Pen(Brushes.Red);      //FIXME поправить получение координат всех элементов червя;
+            int x, y;
+            foreach (var part in snake.body){
+                x = part.X;                       
+                y = part.Y;
+                pen.DrawRectangle(redPen, new Rectangle(x, y, 20, 20));
+            }
+            pictureBox1.Image = snakePic;
+            pictureBox1.Invalidate();
         }
         /// <summary>
         /// Метод чтения данных с сервера
@@ -57,7 +70,7 @@ namespace newWorm
         {
             try
             {
-                client = new TcpClient("192.168.0.100", 12345); // 1)   подлючается к серверу
+                client = new TcpClient("127.0.0.1", 12345);     // 1)   подлючается к серверу
                 sendBuffer = Encoding.UTF8.GetBytes("ID");      // текст запроса у сервера
                 stream = client.GetStream();                    // получаем поток чтения-записи
                 stream.Write(sendBuffer, 0, sendBuffer.Length); // 2)   отправляет запрос на присвоение ID
@@ -75,11 +88,11 @@ namespace newWorm
             }
             catch (System.IO.IOException ex)
             {
-                MessageBox.Show($"Возникла ошибка, не связанная с сетью...{ex.Message}");
+                MessageBox.Show("Возникла ошибка, не связанная с сетью..."+ ex.Message);
             }
             catch (NullReferenceException ex)
             {
-                MessageBox.Show("Ошибка инициализации");
+                MessageBox.Show("Ошибка инициализации"+ ex.StackTrace);
             }
             finally
             {
@@ -91,22 +104,36 @@ namespace newWorm
             switch (e.KeyCode)
             {
                 case Keys.Up:
-                    if (Direction != direction.Down)
-                        Direction = direction.Up;
+                    if (Snake.direction != Snake.Direction.Down)
+                    {
+                        Snake.direction = Snake.Direction.Up;
+                        snake.dY -= snake.Speed;
+                    }
                     break;
                 case Keys.Down:
-                    if (Direction != direction.Up)
-                        Direction = direction.Down;
+                    if (Snake.direction != Snake.Direction.Up)
+                    {
+                        Snake.direction = Snake.Direction.Down;
+                        snake.dY += snake.Speed;
+                    }
                     break;
                 case Keys.Left:
-                    if (Direction != direction.Right)
-                        Direction = direction.Left;
+                    if (Snake.direction != Snake.Direction.Right)
+                    {
+                        Snake.direction = Snake.Direction.Left;
+                        snake.dX -= snake.Speed;
+                    }
                     break;
                 case Keys.Right:
-                    if (Direction != direction.Left)
-                        Direction = direction.Right;
+                    if (Snake.direction != Snake.Direction.Left)
+                    {
+                        Snake.direction = Snake.Direction.Right;
+                        snake.dX += snake.Speed;
+                    }
                     break;
             }
         }
     }
+
+    
 }
