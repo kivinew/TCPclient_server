@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.connectButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.errorLabel = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,7 +45,7 @@
             this.connectButton.TabIndex = 0;
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Click += new System.EventHandler(this.button1_Click);
+            this.connectButton.Click += new System.EventHandler(this.ConnectButtonClick);
             // 
             // pictureBox1
             // 
@@ -53,7 +55,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(480, 480);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pictureBox1_KeyDown);
             // 
             // errorLabel
             // 
@@ -64,6 +65,10 @@
             this.errorLabel.TabIndex = 2;
             this.errorLabel.Text = "Нет ошибок";
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -72,8 +77,10 @@
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.connectButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainForm";
             this.Text = "WORM";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainFormKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -85,6 +92,7 @@
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label errorLabel;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

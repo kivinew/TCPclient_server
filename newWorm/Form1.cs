@@ -12,48 +12,51 @@ namespace newWorm
     /// </summary>
     public partial class mainForm : Form
     {
-        int ID;                                                 // ID клиента
+        //TODO int ID; // ID клиента
         TcpClient client = null;                                // объект клиента
         NetworkStream stream = null;                            // поток для связи с сервером
         byte[] sendBuffer;                                      // буфер передачи
         byte[] receiveBuffer;                                   // буфер чтения
         StringBuilder message = new StringBuilder();            // сообщение от сервера
-        Snake snake = new Snake();                              // змея!
         
-        Image snakePic = Image.FromFile("resources/snake.ico");
-        Graphics pen = Graphics.FromImage(snakePic);
+        public Snake snake = new Snake();
+        
+        static Image snakePic = Image.FromFile("bodyPic.jpg");
+        static Bitmap bitmap = new Bitmap(snakePic);
+        static Graphics graph = Graphics.FromImage(snakePic);
         
         public mainForm()                                       // конструктор
         {
+            ShowInTaskbar = false;
             InitializeComponent();
         }
+        
         /// <summary>
         /// Обновление pictureBox
         /// </summary>
         public void Upd()
         {
-            while(snake.IsInField)// FIXME проверка при движении
+            while(snake.IsInField)
             {
                 snake.Move();
-                Draw();
-                Invalidate();
+                DrawSnake();
             }
         }
+        
         /// <summary>
         /// Отрисовка червя
         /// </summary>
-        public void Draw()                                      // отрисовка червя
+        void DrawSnake()                                      // отрисовка червя
         {
-            Pen redPen = new Pen(Brushes.Red);      //FIXME поправить получение координат всех элементов червя;
             int x, y;
             foreach (var part in snake.body){
                 x = part.X;                       
                 y = part.Y;
-                pen.DrawRectangle(redPen, new Rectangle(x, y, 20, 20));
+                graph.DrawImage(bitmap, x, y);
             }
-            pictureBox1.Image = snakePic;
             pictureBox1.Invalidate();
         }
+        
         /// <summary>
         /// Метод чтения данных с сервера
         /// </summary>
@@ -66,7 +69,43 @@ namespace newWorm
                 message.AppendFormat(Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
             }
         }
-        public void button1_Click(object sender, EventArgs e)
+
+        void MainFormKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                    if (Snake.direction != Snake.Direction.Down)
+                    {
+                        Snake.direction = Snake.Direction.Up;
+                        //snake.dY = -snake.Speed;
+                    }
+                    break;
+                case Keys.Down:
+                    if (Snake.direction != Snake.Direction.Up)
+                    {
+                        Snake.direction = Snake.Direction.Down;
+                        //snake.dY = snake.Speed;
+                    }
+                    break;
+                case Keys.Left:
+                    if (Snake.direction != Snake.Direction.Right)
+                    {
+                        Snake.direction = Snake.Direction.Left;
+                        //snake.dX = -snake.Speed;
+                    }
+                    break;
+                case Keys.Right:
+                    if (Snake.direction != Snake.Direction.Left)
+                    {
+                        Snake.direction = Snake.Direction.Right;
+                        //snake.dX = snake.Speed;
+                    }
+                    break;
+            }
+        }
+        
+        void ConnectButtonClick(object sender, EventArgs e)
         {
             try
             {
@@ -99,39 +138,9 @@ namespace newWorm
 
             }
         }
-        public void pictureBox1_KeyDown(object sender, KeyEventArgs e)
+        void Timer1Tick(object sender, EventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Up:
-                    if (Snake.direction != Snake.Direction.Down)
-                    {
-                        Snake.direction = Snake.Direction.Up;
-                        snake.dY -= snake.Speed;
-                    }
-                    break;
-                case Keys.Down:
-                    if (Snake.direction != Snake.Direction.Up)
-                    {
-                        Snake.direction = Snake.Direction.Down;
-                        snake.dY += snake.Speed;
-                    }
-                    break;
-                case Keys.Left:
-                    if (Snake.direction != Snake.Direction.Right)
-                    {
-                        Snake.direction = Snake.Direction.Left;
-                        snake.dX -= snake.Speed;
-                    }
-                    break;
-                case Keys.Right:
-                    if (Snake.direction != Snake.Direction.Left)
-                    {
-                        Snake.direction = Snake.Direction.Right;
-                        snake.dX += snake.Speed;
-                    }
-                    break;
-            }
+            Upd();
         }
     }
 
