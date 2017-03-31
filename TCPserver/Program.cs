@@ -18,7 +18,7 @@ namespace TCPserver
             NetworkStream stream = null;
             try
             {
-                IPAddress localAddr = IPAddress.Parse("192.168.0.100");     // локальный адрес сервера
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");         // локальный адрес сервера
                 server = new TcpListener(localAddr, 12345);                 // сервер 
                 server.Start();
                 do

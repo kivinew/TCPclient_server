@@ -12,7 +12,7 @@ namespace newWorm
         [STAThread]
         static void Main()
         {
-            Process proc = Process.Start("C:\\Users\\user\\Documents\\SharpDevelop Projects\\server\\bin\\Debug\\server.exe");            
+           // Process proc = Process.Start("E:\\Users\\kivinew\\Documents\\Visual Studio 2017\\Projects\\TCPclient_server\\TCPserver\\bin\\Debug\\TCPclient.exe");            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new mainForm());

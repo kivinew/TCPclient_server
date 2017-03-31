@@ -43,7 +43,7 @@
             this.connectButton.Name = "connectButton";
             this.connectButton.Size = new System.Drawing.Size(75, 23);
             this.connectButton.TabIndex = 0;
-            this.connectButton.Text = "Connect";
+            this.connectButton.Text = "Start game";
             this.connectButton.UseVisualStyleBackColor = true;
             this.connectButton.Click += new System.EventHandler(this.ConnectButtonClick);
             // 
@@ -77,9 +77,11 @@
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.connectButton);
+            this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "WORM";
+            this.Text = "<< SNAKE >> © by KiViNeW ";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainFormKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

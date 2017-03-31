@@ -10,10 +10,10 @@ using System;
 using System.Collections.Generic;
 
 namespace newWorm
-{        
-/// <summary>
-/// Класс змейки.
-/// </summary>
+{
+    /// <summary>
+    /// Класс змейки.
+    /// </summary>
     public class Snake
     {
         /// <summary>
@@ -29,13 +29,14 @@ namespace newWorm
                 Y = y;
             }
         }
-        
-        public int dX{get;set;}
-        public int dY{get;set;}
+
+        public int dX { get; set; }
+        public int dY { get; set; }
         public static Direction direction { get; set; }             // направление червя
         public static int SnakeSize { get; set; }                   // размер червя
         public List<Part> body = new List<Part>();
         public int Speed { get; set; }                              // скорость движения
+
         /// <summary>
         /// Свойство, возвращающее true если змея не вылезла за пределы игрового поля.
         /// </summary>
@@ -43,12 +44,13 @@ namespace newWorm
         {
             get
             {
-                if(body[0].X>0 && body[0].X<480 && body[0].Y>0 && body[0].Y<480)
+                if (body[0].X > 0 && body[0].X < 480 && body[0].Y > 0 && body[0].Y < 480)
                     return true;
-                else 
+                else
                     return false;
             }
         }
+
         /// <summary>
         /// Конструктор змейки
         /// </summary>
@@ -56,46 +58,26 @@ namespace newWorm
         {
             SnakeSize = 3;
             direction = Direction.Right;
-            Speed = 1;
+            Speed = 5;
             Random beginPoint = new Random();
-            int a,b;
-            a = beginPoint.Next(10, 470);
-            b = beginPoint.Next(10, 470);
-            Part head = new Part(a, b);
+            int x, y;
+            x = beginPoint.Next(10, 50);
+            y = beginPoint.Next(10, 470);
+            Part head = new Part(x, y);
             body.Add(head);
             body.Add(head);
             body.Add(head);
         }
-/// <summary>
-/// Метод, сдвигающий список элементов змеи справа налево.
-/// </summary>
+
+        /// <summary>
+        /// Метод, сдвигающий список элементов змеи справа налево.
+        /// </summary>
         public void Move()
         {
-            switch(direction)
-            {
-                case Direction.Up:
-                    dY = -Speed;
-                    dX = 0;
-                    break;
-                case Direction.Down:
-                    dY = Speed;
-                    dX = 0;
-                    break;
-                case Direction.Left:
-                    dX = -Speed;
-                    dY = 0;
-                    break;
-                case Direction.Right:
-                    dX = Speed;
-                    dY = 0;
-                    break;
-                default:
-                    break;
-            }
-            Part temp = new Part(0,0);
+            Part temp = new Part(0, 0);
             temp.X = body[0].X;
             temp.Y = body[0].Y;
-            for (int i = SnakeSize - 1; i > 0; i--) 
+            for (int i = SnakeSize - 1; i > 0; i--)
             {
                 body[i].X = body[i - 1].X;
                 body[i].Y = body[i - 1].Y;
@@ -103,6 +85,7 @@ namespace newWorm
             body[0].X = temp.X + dX;
             body[0].Y = temp.Y + dY;
         }
+
         /// <summary>
         /// Тип "Направление"
         /// </summary>
