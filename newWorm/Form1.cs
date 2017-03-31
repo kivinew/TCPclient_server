@@ -21,8 +21,8 @@ namespace newWorm
 
         public Snake snake = new Snake();
 
-        Image snakePic = Image.FromFile("bodyPic.jpg");  // изображение элемента тела червя
-        //Bitmap bitmap = new Bitmap(snakePic);            // 
+        Image snakePic = Image.FromFile("bodyPic.jpg");         // изображение элемента тела червя
+        //Bitmap bitmap = new Bitmap(snakePic);                 // 
         Graphics graph;
 
         public mainForm()                                       // конструктор
@@ -30,7 +30,7 @@ namespace newWorm
             InitializeComponent();
             //bitmap.SetPixel(10, 10, Color.White);
             graph = pictureBox1.CreateGraphics();
-            //DoubleBuffered = true;
+            DoubleBuffered = true;
             ShowInTaskbar = false;
             timer1.Enabled = true;
         }
@@ -47,9 +47,9 @@ namespace newWorm
         /// <summary>
         /// Отрисовка червя
         /// </summary>
-        void DrawSnake()                                      // отрисовка червя
+        void DrawSnake()
         {
-            int x, y;
+            int x, y;                       //FIXME сюда попадают элементы из List<Part> с одинаковыми координатами
             foreach (var part in snake.body)
             {
                 x = part.X;
@@ -149,6 +149,7 @@ namespace newWorm
         void Timer1Tick(object sender, EventArgs e)
         {
             Upd();
+            pictureBox1.Invalidate();
         }
     }
 

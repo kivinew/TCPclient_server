@@ -17,12 +17,12 @@ namespace newWorm
     public class Snake
     {
         /// <summary>
-        /// Элемент червя
+        /// Элемент змейки
         /// </summary>
         public class Part
         {
             public int X;                                           // координаты
-            public int Y;                                           // элемента тела червя
+            public int Y;                                           // элемента тела змейки
             public Part(int x, int y)
             {
                 X = x;
@@ -30,11 +30,11 @@ namespace newWorm
             }
         }
 
-        public int dX { get; set; }
-        public int dY { get; set; }
-        public static Direction direction { get; set; }             // направление червя
-        public static int SnakeSize { get; set; }                   // размер червя
-        public List<Part> body = new List<Part>();
+        public int dX { get; set; }                                 // сдвиг по горизонтали
+        public int dY { get; set; }                                 // сдвиг по вертикали
+        public static Direction direction { get; set; }             // направление змейки
+        public static int SnakeSize { get; set; }                   // размер змейки
+        public List<Part> body = new List<Part>();                  // список элементов змейки
         public int Speed { get; set; }                              // скорость движения
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace newWorm
         }
 
         /// <summary>
-        /// Конструктор змейки
+        /// Конструктор змейки по умолчанию
         /// </summary>
         public Snake()
         {
@@ -74,16 +74,13 @@ namespace newWorm
         /// </summary>
         public void Move()
         {
-            Part temp = new Part(0, 0);
-            temp.X = body[0].X;
-            temp.Y = body[0].Y;
-            for (int i = SnakeSize - 1; i > 0; i--)
+            for (int i = body.Count - 1; i > 0; i--)
             {
                 body[i].X = body[i - 1].X;
                 body[i].Y = body[i - 1].Y;
             }
-            body[0].X = temp.X + dX;
-            body[0].Y = temp.Y + dY;
+            body[0].X += dX;
+            body[0].Y += dY;
         }
 
         /// <summary>
