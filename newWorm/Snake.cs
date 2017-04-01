@@ -33,9 +33,8 @@ namespace newWorm
         public int dX { get; set; }                                 // сдвиг по горизонтали
         public int dY { get; set; }                                 // сдвиг по вертикали
         public static Direction direction { get; set; }             // направление змейки
-        public static int SnakeSize { get; set; }                   // размер змейки
         public List<Part> body = new List<Part>();                  // список элементов змейки
-        public int Speed { get; set; }                              // скорость движения
+        public int Step { get; set; }                               // шаг расположения элементов тела
 
         /// <summary>
         /// Свойство, возвращающее true если змея не вылезла за пределы игрового поля.
@@ -56,17 +55,15 @@ namespace newWorm
         /// </summary>
         public Snake()
         {
-            SnakeSize = 3;
             direction = Direction.Right;
-            Speed = 5;
+            Step = 15;
             Random beginPoint = new Random();
             int x, y;
             x = beginPoint.Next(10, 50);
             y = beginPoint.Next(10, 470);
-            Part head = new Part(x, y);
-            body.Add(head);
-            body.Add(head);
-            body.Add(head);
+            body.Add(new Part(x, y));
+            body.Add(new Part(x, y));
+            body.Add(new Part(x, y));
         }
 
         /// <summary>

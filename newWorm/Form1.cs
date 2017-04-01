@@ -75,6 +75,9 @@ namespace newWorm
         {
             switch (e.KeyCode)
             {
+                case Keys.OemMinus:
+                    snake.Step = Math.Abs(snake.Step - 1);
+                    break;
                 case Keys.Escape:
                     Application.Exit();
                     break;
@@ -82,7 +85,7 @@ namespace newWorm
                     if (Snake.direction != Snake.Direction.Down)
                     {
                         Snake.direction = Snake.Direction.Up;
-                        snake.dY = -snake.Speed;
+                        snake.dY = -snake.Step; //FIXME ШАГ обновляется только при нажатии клавиш курсора
                         snake.dX = 0;
                     }
                     break;
@@ -90,7 +93,7 @@ namespace newWorm
                     if (Snake.direction != Snake.Direction.Up)
                     {
                         Snake.direction = Snake.Direction.Down;
-                        snake.dY = snake.Speed;
+                        snake.dY = snake.Step;
                         snake.dX = 0;
                     }
                     break;
@@ -98,7 +101,7 @@ namespace newWorm
                     if (Snake.direction != Snake.Direction.Right)
                     {
                         Snake.direction = Snake.Direction.Left;
-                        snake.dX = -snake.Speed;
+                        snake.dX = -snake.Step;
                         snake.dY = 0;
                     }
                     break;
@@ -106,7 +109,7 @@ namespace newWorm
                     if (Snake.direction != Snake.Direction.Left)
                     {
                         Snake.direction = Snake.Direction.Right;
-                        snake.dX = snake.Speed;
+                        snake.dX = snake.Step;
                         snake.dY = 0;
                     }
                     break;
@@ -122,7 +125,7 @@ namespace newWorm
                 //stream = client.GetStream();                    // получаем поток чтения-записи
                 //stream.Write(sendBuffer, 0, sendBuffer.Length); // 2)   отправляет запрос на присвоение ID
                 //receiveBuffer = new byte[client.ReceiveBufferSize];
-                connectButton.Text = "playing...";
+                connectButton.Text = "Esc = EXIT";
                 connectButton.Enabled = false;
                 //if (stream.CanRead)                             //  возможность чтения из потока
                 //{
@@ -149,7 +152,7 @@ namespace newWorm
         void Timer1Tick(object sender, EventArgs e)
         {
             Upd();
-            pictureBox1.Invalidate();
+            //pictureBox1.Invalidate();
         }
     }
 
