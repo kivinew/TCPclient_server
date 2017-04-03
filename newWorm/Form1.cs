@@ -23,12 +23,13 @@ namespace newWorm
 
         Image snakePic = Image.FromFile("bodyPic.jpg");         // изображение элемента тела червя
         //Bitmap bitmap = new Bitmap(snakePic);                 // 
+        Pen pen = Pens.Aquamarine;
         Graphics graph;
+        Point location;
 
         public mainForm()                                       // конструктор
         {
             InitializeComponent();
-            //bitmap.SetPixel(10, 10, Color.White);
             graph = pictureBox1.CreateGraphics();
             DoubleBuffered = true;
             ShowInTaskbar = false;
@@ -41,7 +42,6 @@ namespace newWorm
         public void Upd()
         {
             snake.Move();
-            DrawSnake();
         }
 
         /// <summary>
@@ -49,13 +49,15 @@ namespace newWorm
         /// </summary>
         void DrawSnake()
         {
-            int x, y;                       //FIXME сюда попадают элементы из List<Part> с одинаковыми координатами
+            int x = 0, y = 0;
             foreach (var part in snake.body)
             {
                 x = part.X;
-                y = part.Y;
-                graph.DrawImage(snakePic, x, y);
+                y = part.Y;                                    
+                graph.DrawImage(snakePic, x, y);                        // тело змейки картинками
+                //graph.FillEllipse(Brushes.Aquamarine,x, y, 20, 20);   // тело змейки кружками
             }
+            location = new Point(x, y);
         }
 
         /// <summary>
@@ -71,18 +73,29 @@ namespace newWorm
             }
         }
 
+        /// <summary>
+        /// Обработка нажатий клавиш
+        /// </summary>
+        /// <param name="sender">Главная форма</param>
+        /// <param name="e">Событие KeyDown (нажатая клавиша)</param>
         void MainFormKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
+                case Keys.Space:
+                    
+                    break;
                 case Keys.OemMinus:
                     snake.Step = Math.Abs(snake.Step - 1);
+                    break;
+                case Keys.Oemplus:
+                    snake.Step = Math.Abs(snake.Step + 1);
                     break;
                 case Keys.Escape:
                     Application.Exit();
                     break;
                 case Keys.Up:
-                    if (Snake.direction != Snake.Direction.Down)
+                    if (Snake.direction != Snake.Direction.Down && Snake.direction != Snake.Direction.Up)
                     {
                         Snake.direction = Snake.Direction.Up;
                         snake.dY = -snake.Step; //FIXME ШАГ обновляется только при нажатии клавиш курсора
@@ -90,7 +103,7 @@ namespace newWorm
                     }
                     break;
                 case Keys.Down:
-                    if (Snake.direction != Snake.Direction.Up)
+                    if (Snake.direction != Snake.Direction.Up && Snake.direction != Snake.Direction.Down)
                     {
                         Snake.direction = Snake.Direction.Down;
                         snake.dY = snake.Step;
@@ -98,7 +111,7 @@ namespace newWorm
                     }
                     break;
                 case Keys.Left:
-                    if (Snake.direction != Snake.Direction.Right)
+                    if (Snake.direction != Snake.Direction.Right && Snake.direction != Snake.Direction.Left)
                     {
                         Snake.direction = Snake.Direction.Left;
                         snake.dX = -snake.Step;
@@ -106,7 +119,7 @@ namespace newWorm
                     }
                     break;
                 case Keys.Right:
-                    if (Snake.direction != Snake.Direction.Left)
+                    if (Snake.direction != Snake.Direction.Left && Snake.direction != Snake.Direction.Right)
                     {
                         Snake.direction = Snake.Direction.Right;
                         snake.dX = snake.Step;
@@ -152,9 +165,8 @@ namespace newWorm
         void Timer1Tick(object sender, EventArgs e)
         {
             Upd();
-            //pictureBox1.Invalidate();
+            pictureBox1.Invalidate(new Rectangle(location.X, location.Y, 20, 20));
+            DrawSnake();
         }
     }
-
-
 }

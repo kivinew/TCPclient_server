@@ -1,12 +1,4 @@
-﻿/*
- * Создано в SharpDevelop.
- * Пользователь: user
- * Дата: 29.03.2017
- * Время: 18:36
- * 
- * Для изменения этого шаблона используйте меню "Инструменты | Параметры | Кодирование | Стандартные заголовки".
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace newWorm
@@ -46,7 +38,9 @@ namespace newWorm
                 if (body[0].X > 0 && body[0].X < 480 && body[0].Y > 0 && body[0].Y < 480)
                     return true;
                 else
+                {
                     return false;
+                }
             }
         }
 
@@ -56,10 +50,10 @@ namespace newWorm
         public Snake()
         {
             direction = Direction.Right;
-            Step = 15;
+            Step = 5;
             Random beginPoint = new Random();
             int x, y;
-            x = beginPoint.Next(10, 50);
+            x = beginPoint.Next(10, 470);
             y = beginPoint.Next(10, 470);
             body.Add(new Part(x, y));
             body.Add(new Part(x, y));
