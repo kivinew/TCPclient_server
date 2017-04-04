@@ -50,7 +50,7 @@ namespace newWorm
         public Snake()
         {
             direction = Direction.Right;
-            Step = 5;
+            Step = 15;
             Random beginPoint = new Random();
             int x, y;
             x = beginPoint.Next(10, 470);

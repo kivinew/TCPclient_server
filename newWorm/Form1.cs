@@ -22,11 +22,13 @@ namespace newWorm
         public Snake snake = new Snake();
 
         Image snakePic = Image.FromFile("bodyPic.jpg");         // изображение элемента тела червя
-        //Bitmap bitmap = new Bitmap(snakePic);                 // 
         Pen pen = Pens.Aquamarine;
         Graphics graph;
         Point location;
 
+        /// <summary>
+        /// Конструктор формы
+        /// </summary>
         public mainForm()                                       // конструктор
         {
             InitializeComponent();
@@ -34,14 +36,6 @@ namespace newWorm
             DoubleBuffered = true;
             ShowInTaskbar = false;
             timer1.Enabled = true;
-        }
-
-        /// <summary>
-        /// Сдвиг змейки и обновление pictureBox
-        /// </summary>
-        public void Upd()
-        {
-            snake.Move();
         }
 
         /// <summary>
@@ -92,7 +86,7 @@ namespace newWorm
                     snake.Step = Math.Abs(snake.Step + 1);
                     break;
                 case Keys.Escape:
-                    Application.Exit();
+                    GameOver();
                     break;
                 case Keys.Up:
                     if (Snake.direction != Snake.Direction.Down && Snake.direction != Snake.Direction.Up)
@@ -164,9 +158,22 @@ namespace newWorm
 
         void Timer1Tick(object sender, EventArgs e)
         {
-            Upd();
+            snake.Move();
             pictureBox1.Invalidate(new Rectangle(location.X, location.Y, 20, 20));
-            DrawSnake();
+            if (snake.IsInField)
+                DrawSnake();
+            else
+            {
+                var bodySize = snake.body.Count;
+                if (bodySize < 1)
+                    GameOver();
+                snake.body.RemoveAt(bodySize-1);
+            }
+        }
+
+        private static void GameOver()
+        {
+            Application.Exit();
         }
     }
 }
