@@ -11,11 +11,11 @@ namespace TCPserver
         static void Main(string[] args)
         {
             Console.Title = "<<TcpServer>>";
-            int bytes = 0;                                                  // количество принятых байт
-            int connectFlag = 0;                                            // отметка о подключении
             TcpListener server = null;
             TcpClient client = null;
             NetworkStream stream = null;
+            Apple apple;
+
             try
             {
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");         // локальный адрес сервера
@@ -24,15 +24,16 @@ namespace TCPserver
                 do
                 {
                     client = server.AcceptTcpClient();                      // 1) сервер ожидает входящее подключение
-                    connectFlag = 1;
                     Console.WriteLine("Client connected. Listen...");
                     stream = client.GetStream();                            // поток чтения/записи клиента
-                    byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
                     do
                     {
+                        byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
+                        StringBuilder receivedMessage = new StringBuilder();
+                        int bytes = 0;                                      // количество принятых байт
+                        string message = "GameOver";
                         if (stream.CanRead)                                 // возможность чтения из потока
                         {
-                            StringBuilder receivedMessage = new StringBuilder();
                             do
                             {                                               // 2) ЧТЕНИЕ из потока
                                 bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
@@ -40,10 +41,25 @@ namespace TCPserver
                             } while (stream.DataAvailable);                 // читает, пока в потоке есть данные
                             Console.WriteLine("Получено сообщение от клиента:\n" + receivedMessage);
                         }
-                        string message = "Ваше сообщение получено (" + bytes + " байт)";  // сервер сообщает сколько байтов получил
+                        if (receivedMessage.ToString() == "Apple")          // клиент запросил новое яблоко
+                        {
+                            apple = new Apple();
+                            message = "X" + apple.x.ToString() + "Y" + apple.y.ToString();
+                            Console.WriteLine("Sending new apple coordinates :\n" + message);
+                        }
+                        else                                                // проверяем: съел или нет?
+                        {
+                            int snakeX = message[message.IndexOf('X') + 1];
+                            if (snakeX == apple.x)
+                            {
+                                int snakeY = message[message.IndexOf('Y') + 1];
+
+                            }
+                        }
+
                         byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
                         stream.Write(data, 0, data.Length);                 // 3) отправляет массив байтов клиенту
-                        Console.WriteLine($"Сообщение: \n{message}\nклиенту отправлено!");
+                        Console.WriteLine("Message sent!");
                     } while (true);
                 } while (true);
             }

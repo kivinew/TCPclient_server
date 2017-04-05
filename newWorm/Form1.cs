@@ -19,7 +19,8 @@ namespace newWorm
         byte[] receiveBuffer;                                   // буфер чтения
         StringBuilder message = new StringBuilder();            // сообщение от сервера
 
-        public Snake snake = new Snake();
+        public Snake snake = new Snake();                       // объект Змейка
+        public Apple apple;                                     // объект Яблоко
 
         Image snakePic = Image.FromFile("bodyPic.jpg");         // изображение элемента тела червя
         Pen pen = Pens.Aquamarine;
@@ -29,7 +30,7 @@ namespace newWorm
         /// <summary>
         /// Конструктор формы
         /// </summary>
-        public mainForm()                                       // конструктор
+        public mainForm()
         {
             InitializeComponent();
             graph = pictureBox1.CreateGraphics();
@@ -57,7 +58,7 @@ namespace newWorm
         /// <summary>
         /// Метод чтения данных с сервера
         /// </summary>
-        public void ServerRead()
+        public String ServerRead()
         {
             int bytes = 0;
             while (stream.DataAvailable)                        //  пока есть данные для чтения
@@ -65,8 +66,20 @@ namespace newWorm
                 bytes = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
                 message.AppendFormat(Encoding.UTF8.GetString(receiveBuffer, 0, bytes));
             }
+            return message.ToString();
         }
 
+        /// <summary>
+        /// Метод отправки данных серверу
+        /// </summary>
+        public bool SendToServer()
+        {
+            message = snake.body[0].X.
+            byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
+            stream.Write(data, 0, data.Length);                 // 3) отправляет массив байтов клиенту
+            return true;
+        }
+        
         /// <summary>
         /// Обработка нажатий клавиш
         /// </summary>
@@ -158,17 +171,26 @@ namespace newWorm
 
         void Timer1Tick(object sender, EventArgs e)
         {
-            snake.Move();
-            pictureBox1.Invalidate(new Rectangle(location.X, location.Y, 20, 20));
-            if (snake.IsInField)
-                DrawSnake();
+            var receivedMessage = ServerRead();
+            if (receivedMessage.Contains("Ok"))
+            {
+                snake.Move();
+                pictureBox1.Invalidate(new Rectangle(location.X, location.Y, 20, 20));
+                if (snake.IsInField)
+                    DrawSnake();
+                else
+                {
+                    var bodySize = snake.body.Count;
+                    if (bodySize < 1)
+                        GameOver();
+                    snake.body.RemoveAt(bodySize - 1);
+                }
+            }
             else
             {
-                var bodySize = snake.body.Count;
-                if (bodySize < 1)
-                    GameOver();
-                snake.body.RemoveAt(bodySize-1);
+                GameOver();
             }
+
         }
 
         private static void GameOver()

@@ -21,7 +21,7 @@ namespace newWorm
                 Y = y;
             }
         }
-
+        
         public int dX { get; set; }                                 // сдвиг по горизонтали
         public int dY { get; set; }                                 // сдвиг по вертикали
         public static Direction direction { get; set; }             // направление змейки
