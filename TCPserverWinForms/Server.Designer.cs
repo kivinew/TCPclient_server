@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerForm));
             this.btnStart = new System.Windows.Forms.Button();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.txtPort = new System.Windows.Forms.TextBox();
@@ -39,12 +40,13 @@
             // 
             // btnStart
             // 
+            this.btnStart.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.btnStart.Location = new System.Drawing.Point(157, 15);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(52, 47);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Start server";
-            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.UseVisualStyleBackColor = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // txtHost
@@ -85,12 +87,14 @@
             // 
             // btnStop
             // 
+            this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(220, 15);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(52, 47);
             this.btnStop.TabIndex = 0;
             this.btnStop.Text = "Stop server";
             this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // txtStatus
             // 
@@ -101,10 +105,11 @@
             this.txtStatus.TabIndex = 1;
             this.txtStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // Form1
+            // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -113,7 +118,9 @@
             this.Controls.Add(this.txtHost);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
-            this.Name = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "ServerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "WinForms TCPserver";
             this.ResumeLayout(false);

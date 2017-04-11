@@ -31,7 +31,7 @@ namespace TCPserver
                         byte[] receiveBuffer = new byte[client.ReceiveBufferSize];
                         StringBuilder receivedMessage = new StringBuilder();
                         int bytes = 0;                                      // количество принятых байт
-                        string message = "GameOver";
+                        string message = "Server: ";
                         if (stream.CanRead)                                 // возможность чтения из потока
                         {
                             do
@@ -66,7 +66,6 @@ namespace TCPserver
             }
             catch (Exception ex)
             {
-               
                 Console.WriteLine("-------------------------------------\n"+ex.Message+"\n------------------------------------");
             }
             finally
