@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 
-namespace newWorm
+namespace TCPserverWinForms
 {
     static class Program
     {
@@ -12,11 +14,9 @@ namespace newWorm
         [STAThread]
         static void Main()
         {
-           // Process proc = Process.Start("E:\\Users\\kivinew\\Documents\\Visual Studio 2017\\Projects\\TCPclient_server\\TCPserver\\bin\\Debug\\TCPclient.exe");            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ClientForm());
-            //proc.Close();
+            Application.Run(new ServerForm());
         }
     }
 }

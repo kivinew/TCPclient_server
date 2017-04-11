@@ -19,7 +19,7 @@ namespace TCPserver
             try
             {
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");         // локальный адрес сервера
-                server = new TcpListener(localAddr, 12345);                 // сервер 
+                server = new TcpListener(IPAddress.Any, 12345);                 // сервер 
                 server.Start();
                 do
                 {
@@ -41,6 +41,7 @@ namespace TCPserver
                             } while (stream.DataAvailable);                 // читает, пока в потоке есть данные
                             Console.WriteLine("Получено сообщение от клиента:\n" + receivedMessage);
                         }
+                        apple = new Apple();
                         if (receivedMessage.ToString() == "Apple")          // клиент запросил новое яблоко
                         {
                             apple = new Apple();
@@ -65,9 +66,8 @@ namespace TCPserver
             }
             catch (Exception ex)
             {
-                if (connectFlag == 1)
-                    Console.WriteLine("...lost connection");
-                Console.WriteLine($"-------------------------------------\n{ex.Message}\n------------------------------------");
+               
+                Console.WriteLine("-------------------------------------\n"+ex.Message+"\n------------------------------------");
             }
             finally
             {
