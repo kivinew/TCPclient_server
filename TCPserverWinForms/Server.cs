@@ -43,7 +43,6 @@ namespace TCPserverWinForms
                     txtStatus.Text += receivedMessage;
                     message = receivedMessage.ToString();
                 }
-                apple = new Apple();
                 if (receivedMessage.ToString() == "Apple")          // клиент запросил новое яблоко
                 {
                     apple = new Apple();
@@ -56,6 +55,10 @@ namespace TCPserverWinForms
                     if (snakeX == apple.x)
                     {
                         int snakeY = message[message.IndexOf('Y') + 1];
+                        if (snakeY == apple.y)
+                        {
+
+                        }
                     }
                 }
                 byte[] data = Encoding.UTF8.GetBytes(message);      // преобразуем сообщение в массив байтов
@@ -79,6 +82,7 @@ namespace TCPserverWinForms
                 server = new TcpListener(IPAddress.Any, 12345);             // сервер 
                 server.Start();
                 btnStop.Enabled = true;
+                btnStart.Enabled = false;
             }
             catch (Exception ex)
             {
